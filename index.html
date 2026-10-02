@@ -31,11 +31,24 @@
   .custom-header-media{
     position:relative;
     height: 620px;
-    background: url("./images/hero.jpg") center center / cover no-repeat;
+    overflow:hidden;
+  }
+  .slide{
+    position:absolute; inset:0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    opacity:0;
+    transition: opacity 1.5s ease-in-out;
+  }
+  .slide.is-active{ opacity:1; }
+  @media (prefers-reduced-motion: reduce){
+    .slide{ transition:none; }
   }
   .custom-header-media::after{
     content:"";
     position:absolute; inset:0;
+    z-index:1;
     background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%);
   }
   .site-branding{
@@ -175,7 +188,13 @@
 <div id="page" class="site">
 
   <header id="masthead" class="site-header">
-    <div class="custom-header-media"></div>
+    <div class="custom-header-media">
+      <div class="slide is-active" style="background-image:url('./images/hero/shadows.jpg'); background-position:center 40%;"></div>
+      <div class="slide" style="background-image:url('./images/hero/field.jpg');"></div>
+      <div class="slide" style="background-image:url('./images/hero/chair.jpg'); background-position:center 40%;"></div>
+      <div class="slide" style="background-image:url('./images/hero/sunset.jpg'); background-position:center 80%;"></div>
+      <div class="slide" style="background-image:url('./images/hero/autumn.jpg'); background-position:center 30%;"></div>
+    </div>
 
     <div class="site-branding">
       <h1 class="site-title"><a href="#">Uniware.ca</a></h1>
@@ -226,6 +245,18 @@
   </div>
 
 </div>
+<script>
+  (function(){
+    var slides = document.querySelectorAll('.custom-header-media .slide');
+    if (slides.length < 2) return;
+    var current = 0;
+    setInterval(function(){
+      slides[current].classList.remove('is-active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('is-active');
+    }, 6000);
+  })();
+</script>
 
 </body>
 </html>
