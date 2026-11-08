@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Uniware.ca – We provide consultancy crafted to your IT needs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;600;700;800&display=swap">
+<link rel="preload" as="image" href="./images/hero/shadows.jpg">
 <style>
   :root{
     --dark: #222;
@@ -190,12 +194,12 @@
   <header id="masthead" class="site-header">
     <div class="custom-header-media">
       <div class="slide is-active" style="background-image:url('./images/hero/shadows.jpg'); background-position:center 40%;"></div>
-      <div class="slide" style="background-image:url('./images/hero/field.jpg');"></div>
-      <div class="slide" style="background-image:url('./images/hero/chair.jpg'); background-position:center 40%;"></div>
-      <div class="slide" style="background-image:url('./images/hero/sunset.jpg'); background-position:center 80%;"></div>
-      <div class="slide" style="background-image:url('./images/hero/autumn.jpg'); background-position:center 30%;"></div>
-      <div class="slide" style="background-image:url('./images/hero/tunnel.jpg'); background-position:center 40%;"></div>
-      <div class="slide" style="background-image:url('./images/hero/winter.jpg'); background-position:center 85%;"></div>
+      <div class="slide" data-bg="./images/hero/field.jpg"></div>
+      <div class="slide" data-bg="./images/hero/chair.jpg" style="background-position:center 40%;"></div>
+      <div class="slide" data-bg="./images/hero/sunset.jpg" style="background-position:center 80%;"></div>
+      <div class="slide" data-bg="./images/hero/autumn.jpg" style="background-position:center 30%;"></div>
+      <div class="slide" data-bg="./images/hero/tunnel.jpg" style="background-position:center 40%;"></div>
+      <div class="slide" data-bg="./images/hero/winter.jpg" style="background-position:center 85%;"></div>
     </div>
 
     <div class="site-branding">
@@ -252,10 +256,24 @@
     var slides = document.querySelectorAll('.custom-header-media .slide');
     if (slides.length < 2) return;
     var current = 0;
+
+    // Slides after the first carry their image in data-bg and are only
+    // loaded one step ahead of being shown, so the first paint needs one photo.
+    function load(i){
+      var s = slides[i], src = s.getAttribute('data-bg');
+      if (!src) return;
+      s.style.backgroundImage = "url('" + src + "')";
+      s.removeAttribute('data-bg');
+    }
+
+    window.addEventListener('load', function(){ load(1); });
+
     setInterval(function(){
       slides[current].classList.remove('is-active');
       current = (current + 1) % slides.length;
+      load(current);
       slides[current].classList.add('is-active');
+      load((current + 1) % slides.length);
     }, 6000);
   })();
 </script>
